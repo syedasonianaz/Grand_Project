@@ -1,11 +1,11 @@
 import streamlit as st 
 import pandas as pd
+import pickle 
 import os 
-import joblib
 
-model_path = os.path.join("model", "gbgs_model.joblib")
-model = joblib.load(model_path)
-
+model_path = os.path.join("model", "gbgs_model.pkl")
+with open(model_path, 'rb') as file:
+    model = pickle.load(file)
 
 def main():
     st.title("Credit Risk Assessment")
@@ -14,6 +14,10 @@ def main():
     <h2 style="color:white;text-align:center;">Streamlit Credit Risk Assessment App </h2>
     </div>
     """
+    with st.sidebar:
+        user_name=st.text_input("Enter your name: ")
+        if len(user_name)>3:
+            st.info(f"Welcome {user_name}")
 
     st.markdown(html_temp, unsafe_allow_html=True)
     Age = st.number_input("Enter Age")  
@@ -43,9 +47,9 @@ def main():
             try:
                 prediction = predictions(inputs)[0]
                 if prediction == 1:
-                    st.success("The Credit Risk Assessment's status is {}".format(prediction))
+                    st.success("Dear {} the Credit Risk Assessment's status is {}".format(user_name,prediction))
                 else:
-                    st.error("The Credit Risk Assessment's status is {}".format(prediction))
+                    st.error("Dear {} the Credit Risk Assessment's status is {}".format(user_name,prediction))
             except Exception as e:
                 st.error(f"Error during prediction: {e}")
         else:
