@@ -1,13 +1,11 @@
 import streamlit as st 
 import pandas as pd
-import pickle 
 import os 
+import joblib
 
-model_path = os.path.join("model", "gbgs_model.pkl")
-print(f"Attempting to load model from: {model_path}")
+model_path = os.path.join("model", "gbgs_model.joblib")
+model = joblib.load(model_path)
 
-with open(model_path, 'rb') as file:
-    model = pickle.load(file)
 
 def main():
     st.title("Credit Risk Assessment")
