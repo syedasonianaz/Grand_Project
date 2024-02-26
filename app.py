@@ -1,66 +1,83 @@
-import streamlit as st 
+import streamlit as st
 import pandas as pd
 import joblib
 
-model_path = r'E:\VS Code\Grand_Project\notebook\gbgs_model.joblib'
-model = joblib.load(model_path)
+print(model_path)
 
-def main():
-    st.title("Credit Risk Assessment")
-    html_temp = """
-    <div style="background-color:tomato;padding:10px">
-    <h2 style="color:white;text-align:center;">Streamlit Credit Risk Assessment App </h2>
-    </div>
-    """
-    with st.sidebar:
-        user_name=st.text_input("Enter your name: ")
-        if len(user_name)>3:
-            st.info(f"Welcome {user_name}")
+"""model_path = r'/path/to/your/model/directory/gbgs_model.joblib'"""
 
-    st.markdown(html_temp, unsafe_allow_html=True)
-    Age = st.number_input("Enter Age")  
-    Income = st.number_input("Enter Income")
-    Home = st.text_input("Enter Home")
-    Emp_length = st.number_input("Enter Employment Length")
-    Intent = st.text_input("Enter Loan Intension")
-    Amount = st.number_input("Enter Amount")
-    Rate = st.number_input("Enter Rate")
-    Percent_income = st.number_input("Enter Income Percentage")
-    Default = st.text_input("Enter Default") 
-
-    data = {'Age': [Age],
-            'Income': [Income],
-            'Home': [Home],
-            'Emp_length': [Emp_length],
-            'Intent': [Intent],
-            'Amount': [Amount],
-            'Rate': [Rate],
-            'Percent_income': [Percent_income],
-            'Default': [Default]}
-    
-    inputs = pd.DataFrame(data)
-
-    if st.button("Predict"):
-        if not inputs.empty:
-            try:
-                prediction = predictions(inputs)[0]
-                if prediction == 1:
-                    st.success("Dear {} the Credit Risk Assessment's status is {}".format(user_name,prediction))
-                else:
-                    st.error("Dear {} the Credit Risk Assessment's status is {}".format(user_name,prediction))
-            except Exception as e:
-                st.error(f"Error during prediction: {e}")
-        else:
-            st.warning("Please enter valid input values.")
-
-    if st.button("About"):
-        st.text("Let's Learn")
-        st.text("Built with Streamlit")
+model_path = r'E:/VS Code/Grand_Project/notebook/gbgs_model.joblib'
 
 
-def predictions(inputs):
-    prediction = model.predict(inputs)
-    return prediction
+try:
+    model = joblib.load(model_path)
+    print("Model loaded successfully!")
 
-if __name__ == "__main__":
-    main()
+except FileNotFoundError:
+    print("Error: Model file not found at", model_path)
+    st.error("Model file not found. Please ensure the file is located at the correct path and is accessible.")
+
+except Exception as e:
+    print("Error loading model:", e)
+    st.error("An error occurred while loading the model. Please check the logs for details.")
+
+else:  
+
+    def main():
+        st.title("Credit Risk Assessment")
+        html_temp = """
+        <div style="background-color:tomato;padding:10px">
+        <h2 style="color:white;text-align:center;">Streamlit Credit Risk Assessment App </h2>
+        </div>
+        """
+        with st.sidebar:
+            user_name = st.text_input("Enter your name: ")
+            if len(user_name) > 3:
+                st.info(f"Welcome {user_name}")
+
+        st.markdown(html_temp, unsafe_allow_html=True)
+        Age = st.number_input("Enter Age")
+        Income = st.number_input("Enter Income")
+        Home = st.text_input("Enter Home")
+        Emp_length = st.number_input("Enter Employment Length")
+        Intent = st.text_input("Enter Loan Intension")
+        Amount = st.number_input("Enter Amount")
+        Rate = st.number_input("Enter Rate")
+        Percent_income = st.number_input("Enter Income Percentage")
+        Default = st.text_input("Enter Default")
+
+        data = {'Age': [Age],
+                'Income': [Income],
+                'Home': [Home],
+                'Emp_length': [Emp_length],
+                'Intent': [Intent],
+                'Amount': [Amount],
+                'Rate': [Rate],
+                'Percent_income': [Percent_income],
+                'Default': [Default]}
+
+        inputs = pd.DataFrame(data)
+
+        if st.button("Predict"):
+            if not inputs.empty:
+                try:
+                    prediction = predictions(inputs)[0]
+                    if prediction == 1:
+                        st.success("Dear {} the Credit Risk Assessment's status is {}".format(user_name, prediction))
+                    else:
+                        st.error("Dear {} the Credit Risk Assessment's status is {}".format(user_name, prediction))
+                except Exception as e:
+                    st.error(f"Error during prediction: {e}")
+            else:
+                st.warning("Please enter valid input values.")
+
+        if st.button("About"):
+            st.text("Let's Learn")
+            st.text("Built with Streamlit")
+
+    def predictions(inputs):
+        prediction = model.predict(inputs)
+        return prediction
+
+    if __name__ == "__main__":
+        main()
