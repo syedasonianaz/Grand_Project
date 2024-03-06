@@ -1,10 +1,11 @@
 import streamlit as st 
 import pandas as pd
-import joblib
+import pickle 
+import os 
 
-model_folder = "model"
-model_path = r'model\model.joblib'
-model = joblib.load(model_path)
+model_path = os.path.join("model", "grid_search.pkl")
+with open(model_path, 'rb') as file:
+    model = pickle.load(file)
 
 def main():
     st.title("Credit Risk Assessment")
