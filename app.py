@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model_path = r'model\gbgs_model.joblib'
+model_folder = "model"
+model_path = r'model\model.joblib'
 model = joblib.load(model_path)
 
 def main():
